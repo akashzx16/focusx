@@ -197,6 +197,21 @@ def session_end():
     return redirect(url_for("dashboard"))
 
 
+@app.route("/sessions/clear", methods=["POST"])
+@login_required
+def sessions_clear():
+    """Delete only the signed-in user's completed session history."""
+    conn = get_db()
+    conn.execute(
+        "DELETE FROM sessions WHERE user_id = ? AND ended_at IS NOT NULL",
+        (session["user_id"],),
+    )
+    conn.commit()
+    conn.close()
+    flash("Your completed session history has been cleared.")
+    return redirect(url_for("dashboard"))
+
+
 @app.route("/review/<int:topic_id>/complete", methods=["POST"])
 @login_required
 def review_complete(topic_id):

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-shell">
+    <nav class="home-nav">
+        <a class="home-brand" href="{{ url_for('dashboard') }}"><span class="brand-mark">✦</span> FocusX</a>
+        <div class="nav-actions">
+            <a class="quiet-link" href="{{ url_for('login') }}">Log in</a>
+            <a class="nav-cta" href="{{ url_for('signup') }}">Get started</a>
+        </div>
+    </nav>
+
+    <main class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">STUDY WITH INTENTION</p>
+            <h1>Make room for<br><em>deep focus.</em></h1>
+            <p class="hero-text">FocusX is a calm, personal space to time your work, build consistency, and remember what matters.</p>
+            <div class="hero-actions">
+                <a class="hero-cta" href="{{ url_for('signup') }}">Create your free account <span>→</span></a>
+                <a class="hero-secondary" href="#how-it-works">See how it works</a>
+            </div>
+            <div class="mini-proof"><span class="proof-avatars"><i>J</i><i>M</i><i>A</i></span><span>Built for your most focused days.</span></div>
+        </div>
+
+        <div class="hero-visual" aria-label="Example FocusX study dashboard">
+            <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+            <div class="preview-card">
+                <div class="preview-top"><span class="preview-logo">✦ FocusX</span><span class="live-dot">• in focus</span></div>
+                <p class="preview-label">CURRENT SESSION</p>
+                <p class="preview-topic">Cell biology</p>
+                <div class="preview-dial"><div class="preview-dial-inner"><strong>24:18</strong><span>remaining</span></div></div>
+                <div class="preview-progress"><span>Daily progress</span><b>45 / 60 min</b><div><i></i></div></div>
+            </div>
+            <div class="floating-note"><span>✦</span><div><b>Keep going</b><small>15 minutes to your goal</small></div></div>
+        </div>
+    </main>
+
+    <section class="feature-strip" id="how-it-works">
+        <div><span class="feature-icon">◷</span><h2>Start a session</h2><p>Set an intention, choose a duration, and settle in.</p></div>
+        <div><span class="feature-icon">◒</span><h2>Build a rhythm</h2><p>See your daily progress and protect your streak.</p></div>
+        <div><span class="feature-icon">⌁</span><h2>Remember more</h2><p>Return to topics at just the right time.</p></div>
+    </section>
+</div>
+{% endblock %}

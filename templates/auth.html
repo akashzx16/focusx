@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card auth-card">
+    <span class="brand">FocusX</span>
+    {% if mode == "signup" %}
+        <h1>Create your account</h1>
+        <p class="auth-copy">Keep your study sessions, progress, and review plan in one private space.</p>
+        <form method="POST" class="auth-form">
+            <label>Name<input name="name" required autocomplete="name"></label>
+            <label>Email<input type="email" name="email" required autocomplete="email"></label>
+            <label>Password<input type="password" name="password" required minlength="8" autocomplete="new-password"></label>
+            <button type="submit">Create account</button>
+        </form>
+        <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+    {% else %}
+        <h1>Welcome back</h1>
+        <p class="auth-copy">Log in to continue with your study plan.</p>
+        <form method="POST" class="auth-form">
+            <label>Email<input type="email" name="email" required autocomplete="email"></label>
+            <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+            <button type="submit">Log in</button>
+        </form>
+        <p class="auth-switch">New to FocusX? <a href="{{ url_for('signup') }}">Create an account</a></p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card timer-card">
+    <div class="header-row">
+        <span class="brand">FocusX</span>
+    </div>
+
+    <form method="POST" action="{{ url_for('session_update_topic') }}" class="topic-form">
+        <input type="text" name="topic" value="{{ session.topic }}" placeholder="What are you studying? (fill in anytime)">
+        <button type="submit" class="small-btn">Save</button>
+    </form>
+
+    <div class="dial-wrap">
+        <svg viewBox="0 0 240 240" class="dial-svg">
+            <circle cx="120" cy="120" r="104" class="dial-track"></circle>
+            <circle cx="120" cy="120" r="104" class="dial-progress" id="dial-progress"
+                    stroke-dasharray="653.5" stroke-dashoffset="0"></circle>
+        </svg>
+        <div class="dial-center">
+            <p class="dial-time" id="dial-time">{{ session.planned_duration_minutes }}<span class="dial-unit">min</span></p>
+            <p class="dial-status" id="dial-status">remaining</p>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('session_end') }}" class="end-form">
+        <input type="hidden" name="topic" id="end-topic-input" value="{{ session.topic }}">
+        <button type="submit">End session</button>
+    </form>
+</div>
+
+<script>
+    const startedAt = new Date("{{ session.started_at }}");
+    const plannedSeconds = {{ session.planned_duration_minutes }} * 60;
+    const circumference = 653.5; // 2 * PI * 104, precomputed
+
+    const progressEl = document.getElementById("dial-progress");
+    const timeEl = document.getElementById("dial-time");
+    const statusEl = document.getElementById("dial-status");
+
+    // keep the hidden end-form topic field synced with whatever's in the topic input,
+    // so ending the session captures the latest text even if "Save" wasn't clicked
+    const topicInput = document.querySelector('input[name="topic"]');
+    const endTopicInput = document.getElementById("end-topic-input");
+    topicInput.addEventListener("input", () => {
+        endTopicInput.value = topicInput.value;
+    });
+
+    function formatTime(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        return String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    }
+
+    function updateTimer() {
+        const now = new Date();
+        const elapsedSeconds = Math.floor((now - startedAt) / 1000);
+        const remaining = plannedSeconds - elapsedSeconds;
+
+        if (remaining >= 0) {
+            const fraction = elapsedSeconds / plannedSeconds;
+            progressEl.style.strokeDashoffset = circumference * fraction;
+            timeEl.innerHTML = formatTime(remaining) + '<span class="dial-unit"></span>';
+            statusEl.textContent = "remaining";
+        } else {
+            progressEl.style.strokeDashoffset = 0;
+            progressEl.classList.add("overtime");
+            timeEl.innerHTML = "+" + formatTime(-remaining) + '<span class="dial-unit"></span>';
+            statusEl.textContent = "overtime";
+        }
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+</script>
+{% endblock %}
